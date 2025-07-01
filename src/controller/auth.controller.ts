@@ -137,6 +137,80 @@ export const getUserProfile = async (
   }
 };
 
+export const updateUser = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?._id;
+    const user = await User.findById(userId);
+    if (!user) {
+      logger.warn("Request failed - User not found", { userId });
+      sendResponse({ res, status: 404, error: "Invalid credentials" });
+      return;
+    }
+
+    const { name, email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser._id.toString() !== userId) {
+      logger.warn("Request failed - Email already exists", { email });
+      sendResponse({ res, status: 400, error: "Email already exists" });
+      return;
+    }
+
+    if (password) {
+      user.password = await argon2.hash(password);
+    }
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+
+    await user.save();
+
+    const { password: _, ...isWithoutPassword } = user.toObject();
+    logger.info("User profile updated successfully", { userId });
+
+    sendResponse({
+      res,
+      status: 200,
+      message: "User profile Updated successfully",
+      data: { user: isWithoutPassword },
+    });
+  } catch (error) {
+    logger.error("Request failed - Internal server error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+  }
+};
+
+export const deleteUser = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.params.id;
+    if (!userId) {
+      logger.warn("Delete user failed - Missing user ID");
+      sendResponse({ res, status: 400, error: "User Id is required" });
+      return;
+    }
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      logger.warn("Request failed - User not found", { userId });
+      sendResponse({ res, status: 400, error: "User not found" });
+      return;
+    }
+    logger.info("User profile deleted successfully", { userId });
+    sendResponse({
+      res,
+      status: 200,
+      message: "User profile deleted successfully",
+    });
+  } catch (error) {
+    logger.error("Request failed - Internal server error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    sendResponse({ res, status: 500, error: "Internal server error" });
+  }
+};
+
 export const sendVerificationEmail = async (
   user: any,
   verificationToken: string,

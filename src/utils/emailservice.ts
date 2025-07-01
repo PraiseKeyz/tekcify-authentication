@@ -21,5 +21,3 @@ export const sendEmail = async (to: string, subject: string, text: string) => {
     text,
   });
 };
-
-console.log(process.env.SMTP_USER);
