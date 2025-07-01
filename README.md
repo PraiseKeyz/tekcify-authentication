@@ -67,7 +67,7 @@ EMAIL_FROM=no-reply@tekcify.com
 
 Access the full API documentation and example requests in the Postman collection:
 
-[Postman Collection](https://www.postman.com/your-workspace-link-here)
+[Postman Collection](https://documenter.getpostman.com/view/40640896/2sB34ZrjZ5)
 
 ## Code Quality
 
