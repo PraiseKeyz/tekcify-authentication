@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Modern JS features, async/await, etc.
+    "module": "CommonJS", // Node.js uses CommonJS (or "NodeNext" for ESM)
+    "rootDir": "src", // Source files location
+    "outDir": "dist", // Compiled files output
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true, // Allow default imports from CommonJS
+    "forceConsistentCasingInFileNames": true, // Prevent case-related import bugs
+    "skipLibCheck": true, // Speed up build by skipping type checks on node_modules
+    "resolveJsonModule": true, // Allow importing JSON files
+    "noImplicitReturns": true, // Ensure all code paths in a function return a value
+    "noUnusedLocals": true, // Error on unused local variables
+    "noUnusedParameters": false, // Error on unused function parameters
+    "moduleResolution": "node", // Node.js module resolution
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
+    "declaration": true, // Generate .d.ts files for your code (good for libs)
+    "sourceMap": true // Generate source maps for debugging
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "logs"]
+}
